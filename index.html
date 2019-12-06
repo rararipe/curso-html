@@ -1,1 +1,143 @@
-<h1>Teste</h1>
+<!DOCTYPE html>
+<html ng-app="myModule">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Angular JS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+</head>
+<body ng-controller="indexController">
+<header class="container">
+    <h2 ng-bind="titulo"></h2>
+</header>
+<main class="container">
+    <div class="row">
+        <input type="text" ng-model="busca.nome" placeholder="Busca">
+        {{busca}}
+    </div>
+    <div class="row">
+        <table class="striped">
+            <thead>
+                <th>Nome</th>
+                <th>Matrícula</th>
+                <th>N1</th>
+                <th>N2</th>
+                <th>N3</th>
+                <th>Média</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="aluno in alunos | filter:busca">
+                    <td>{{aluno.nome}}</td>
+                    <td>{{aluno.matricula}}</td>
+                    <td>{{aluno.nota1}}</td>
+                    <td>{{aluno.nota2}}</td>
+                    <td>{{aluno.nota3}}</td>
+                    <td>{{aluno.media}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <!-- Modal Trigger -->
+            <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Novo</a>
+        </div>
+    </div>
+</main>
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal modal-fixed-footer">
+        <div class="modal-content">
+            <h4>Adicionar Aluno</h4>
+            <p>Preencha os dados do aluno</p>
+            <div class="row">
+                <div class="input-field col m6 s12">
+                    <input type="text" ng-model="aluno.matricula" class="validate">
+                    <label>Matrícula</label>
+                </div>
+                <div class="input-field col m6 s12">
+                    <input type="text" ng-model="aluno.nome" class="validate">
+                    <label>Nome</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col m4 s4">
+                        <input type="text" ng-model="aluno.nota1" class="validate">
+                        <label>Nota 1</label>
+                </div>
+                <div class="input-field col m4 s4">
+                        <input type="text" ng-model="aluno.nota2" class="validate">
+                        <label>Nota 2</label>
+                </div>
+                <div class="input-field col m4 s4">
+                        <input type="text" ng-model="aluno.nota3" class="validate">
+                        <label>Nota 3</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a ng-click="addAluno(aluno)" class="waves-effect waves-light btn blue" href="#modal1">Adicionar</a>
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        </div>
+    </div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+<script src="C:/Code/Introducao_ao_Angular_JS/lib/angular/angular.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.modal-trigger').leanModal();
+    });
+</script>
+
+<script type="text/javascript">
+    angular.module("myModule",[])
+    .controller("indexController",function($scope){
+        $scope.titulo = "Sistema com Angular JS";
+        $scope.alunos = [
+        {nome:"Camila", matricula:"0001", nota1:78, nota2:65, nota3: 87},
+        {nome:"Clarisse", matricula:"0002", nota1:88, nota2:45, nota3: 77},
+        {nome:"Claudia", matricula:"0003", nota1:67, nota2:95, nota3: 76},
+        {nome:"Deborah", matricula:"0004", nota1:77, nota2:99, nota3: 87}
+        ];
+
+        var init = function(){
+            $scope.alunos.forEach(function(aluno){
+                aluno.media = media(aluno);
+                limpaForm();
+            })
+        };
+
+        var media = function(aluno){
+            var media = (parseFloat(aluno.nota1) + parseFloat(aluno.nota2) + parseFloat(aluno.nota3)) / 3;
+            return media.toFixed(2);
+        };
+
+        $scope.addAluno = function(aluno){
+            aluno.media = media(aluno);
+            $scope.alunos.push(aluno);
+            $('#modal1').closeModal();
+            limpaForm();
+        };
+
+        $scope.alteraAluno = function(aluno){
+            aluno.media = media(aluno);
+            $scope.alunos.push(aluno);
+            $('#modal1').closeModal();
+            limpaForm();
+        };
+
+        var limpaForm = function(){
+            // $scope.aluno = {nome:"", matricula:"", nota1:'', nota2:'', nota3:'', media=''};
+        };
+
+        var preencheForm = function(aluno){
+            Aluno.matricula = aluno.matricula;
+            Aluno.nome = aluno.nome;
+        };
+
+        init();
+    })
+
+</script>
+</body>
+</html>
